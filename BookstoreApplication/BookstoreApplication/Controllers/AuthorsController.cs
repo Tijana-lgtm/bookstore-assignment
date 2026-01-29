@@ -1,6 +1,8 @@
 ﻿using BookstoreApplication.Repositories;
 using BookstoreApplication.Models;
 using Microsoft.AspNetCore.Mvc;
+using BookstoreApplication.Services;
+
 
 namespace BookstoreApplication.Controllers
 {
@@ -8,24 +10,24 @@ namespace BookstoreApplication.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private AuthorRepository _repository;
+        private readonly AuthorService _authorService;
         
         public AuthorsController(AppDbContext context)
         {
-            _repository = new AuthorRepository(context);
+            _authorService = new AuthorService(context);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _repository.GetAllAsync());
+            return Ok(await _authorService.GetAll());
         }
 
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
         {
-            Author? author = await _repository.GetByIdAsync(id);
+            Author? author = await _authorService.GetOne(id);
             if (author == null)
             {
                 return NotFound();
@@ -38,7 +40,7 @@ namespace BookstoreApplication.Controllers
         public async Task<IActionResult> Post(Author author)
         {
             author.Id = 0;
-            Author createdAuthor = await _repository.AddAsync(author);
+            await _authorService.Add(author);
             return Ok(author);
         }
 
@@ -50,22 +52,16 @@ namespace BookstoreApplication.Controllers
             {
                 return BadRequest();
             }
-
-            Author? existingAuthor = await _repository.GetByIdAsync(id);
-            if (existingAuthor == null)
-            {
-                return NotFound();
-            }
             
-            Author updatedAuthor = await _repository.UpdateAsync(author);
-            return Ok(updatedAuthor);
+           await _authorService.Update(author);
+           return Ok(author);
         }
 
         
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            bool deleted = await _repository.DeleteAsync(id);
+            bool deleted = await _authorService.Delete(id);
             if (!deleted)
             {
                 return NotFound();
