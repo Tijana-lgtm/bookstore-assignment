@@ -3,13 +3,13 @@ using BookstoreApplication.Repositories;
 
 namespace BookstoreApplication.Services
 {
-    public class AuthorService
+    public class AuthorService : IAuthorService
     {
-        private readonly AuthorRepository _authorRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public AuthorService (AppDbContext context)
+        public AuthorService(IAuthorRepository authorRepository)
         {
-            _authorRepository = new AuthorRepository (context);
+            _authorRepository = authorRepository;
         }
 
         public async Task<List<Author>> GetAll()

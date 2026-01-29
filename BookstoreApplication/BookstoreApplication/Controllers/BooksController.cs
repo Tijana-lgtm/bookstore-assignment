@@ -9,15 +9,15 @@ namespace BookstoreApplication.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly BookService _bookService;
-        private readonly AuthorRepository _authorRepository;
-        private readonly PublisherRepository _publisherRepository;
+        private readonly IBookService _bookService;
+        private readonly IAuthorService _authorService;
+        private readonly IPublisherService _publisherService;
 
-        public BooksController(AppDbContext context)
+        public BooksController(IBookService bookService, IAuthorService authorService, IPublisherService publisherService)
         {
-            _bookService = new BookService(context);
-            _authorRepository = new AuthorRepository(context);
-            _publisherRepository = new PublisherRepository(context);
+            _bookService = bookService;
+            _authorService = authorService;
+            _publisherService = publisherService;
         }
 
         [HttpGet]
@@ -40,14 +40,12 @@ namespace BookstoreApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Book book)
         {
-            Author? author = await _authorRepository.GetByIdAsync(book.AuthorId);
-            if (author == null)
+            Author? author = await _authorService.GetOne(book.AuthorId); if (author == null)
             {
                 return BadRequest();
             }
 
-            Publisher? publisher = await _publisherRepository.GetByIdAsync(book.PublisherId);
-            if (publisher == null)
+            Publisher? publisher = await _publisherService.GetOne(book.PublisherId); if (publisher == null)
             {
                 return BadRequest();
             }
@@ -64,14 +62,12 @@ namespace BookstoreApplication.Controllers
                 return BadRequest();
             }
 
-            Author? author = await _authorRepository.GetByIdAsync(book.AuthorId);
-            if (author == null)
+            Author? author = await _authorService.GetOne(book.AuthorId); if (author == null)
             {
                 return BadRequest();
             }
 
-            Publisher? publisher = await _publisherRepository.GetByIdAsync(book.PublisherId);
-            if (publisher == null)
+            Publisher? publisher = await _publisherService.GetOne(book.PublisherId); if (publisher == null)
             {
                 return BadRequest();
             }
