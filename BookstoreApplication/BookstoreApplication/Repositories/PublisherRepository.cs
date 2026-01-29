@@ -13,40 +13,39 @@ namespace BookstoreApplication.Repositories
             _context = context;
         }
 
-        public List<Publisher> GetAll()
+        public async Task<List<Publisher>> GetAllAsync()
         {
-            return _context.Publishers.ToList();
+            return await _context.Publishers.ToListAsync();
         }
 
-        public Publisher? GetById(int id)
+        public async Task<Publisher?> GetByIdAsync(int id)
         {
-            return _context.Publishers.Find(id);
+            return await _context.Publishers.FindAsync(id);
         }
 
-        public Publisher Add(Publisher publisher)
+        public async Task<Publisher> AddAsync(Publisher publisher)
         {
             _context.Publishers.Add(publisher);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return publisher;
         }
 
-        public Publisher Update(Publisher publisher)
+        public async Task<Publisher> UpdateAsync(Publisher publisher)
         {
             _context.Publishers.Update(publisher);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return publisher;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            Publisher? publisher = _context.Publishers.Find(id);
+            Publisher? publisher = await _context.Publishers.FindAsync(id);
             if (publisher == null)
             {
                 return false;
             }
-
             _context.Publishers.Remove(publisher);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

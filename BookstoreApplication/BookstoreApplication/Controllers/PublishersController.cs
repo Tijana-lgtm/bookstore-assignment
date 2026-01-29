@@ -15,18 +15,16 @@ namespace BookstoreApplication.Controllers
             _repository = new PublisherRepository(context);
         }
 
-        // GET: api/publishers
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_repository.GetAll());
+            return Ok(await _repository.GetAllAsync());
         }
 
-        // GET api/publishers/id
         [HttpGet("{id}")]
-        public IActionResult GetOne(int id)
+        public async Task<IActionResult> GetOne(int id)
         {
-            Publisher? publisher = _repository.GetById(id);
+            Publisher? publisher = await _repository.GetByIdAsync(id);
             if (publisher == null)
             {
                 return NotFound();
@@ -34,38 +32,36 @@ namespace BookstoreApplication.Controllers
             return Ok(publisher);
         }
 
-        // POST api/publishers
         [HttpPost]
-        public IActionResult Post(Publisher publisher)
+        public async Task<IActionResult> Post(Publisher publisher)
         {
-            Publisher createdPublisher = _repository.Add(publisher);
+            publisher.Id = 0;
+            Publisher createdPublisher = await _repository.AddAsync(publisher);
             return Ok(createdPublisher);
         }
 
-        // PUT api/publishers/id
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Publisher publisher)
+        public async Task<IActionResult> Put(int id, Publisher publisher)
         {
             if (id != publisher.Id)
             {
                 return BadRequest();
             }
 
-            Publisher? existingPublisher = _repository.GetById(id);
+            Publisher? existingPublisher = await _repository.GetByIdAsync(id);
             if (existingPublisher == null)
             {
                 return NotFound();
             }
 
-            Publisher updatedPublisher = _repository.Update(publisher);
+            Publisher updatedPublisher = await _repository.UpdateAsync(publisher);
             return Ok(updatedPublisher);
         }
 
-        // DELETE api/publishers/id
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool deleted = _repository.Delete(id);
+            bool deleted = await _repository.DeleteAsync(id);
             if (!deleted)
             {
                 return NotFound();
