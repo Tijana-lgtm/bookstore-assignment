@@ -1,11 +1,23 @@
 using BookstoreApplication.Mappers;
 using BookstoreApplication.Middleware;
+using Serilog;
 using BookstoreApplication.Models;
 using BookstoreApplication.Repositories;
 using BookstoreApplication.Services;
 using Microsoft.EntityFrameworkCore;
 
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .Build())
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
