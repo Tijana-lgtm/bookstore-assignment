@@ -1,4 +1,5 @@
-﻿using BookstoreApplication.Models;
+﻿using BookstoreApplication.DTOs;
+using BookstoreApplication.Models;
 
 namespace BookstoreApplication.Services
 {
@@ -6,8 +7,8 @@ namespace BookstoreApplication.Services
     {
         Task Add(Book book);
         Task<bool> Delete(int id);
-        Task<List<Book>> GetAll();
-        Task<Book?> GetOne(int id);
+        Task<List<BookDTO>> GetAll();
+        Task<BookDetailsDTO?> GetOne(int id);
         Task Update(Book book);
     }
 }
