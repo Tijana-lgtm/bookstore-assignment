@@ -1,4 +1,5 @@
 ﻿using BookstoreApplication.DTOs;
+using BookstoreApplication.Exceptions;
 using BookstoreApplication.Models;
 using BookstoreApplication.Repositories;
 using BookstoreApplication.Services;
@@ -30,25 +31,23 @@ namespace BookstoreApplication.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
         {
-            BookDetailsDTO? bookDto = await _bookService.GetOne(id);
-            if (bookDto == null)
-            {
-                return NotFound();
-            }
+            BookDetailsDTO bookDto = await _bookService.GetOne(id);
             return Ok(bookDto);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(Book book)
         {
-            Author? author = await _authorService.GetOne(book.AuthorId); if (author == null)
+            Author? author = await _authorService.GetOne(book.AuthorId); 
+            if (author == null)
             {
-                return BadRequest();
+                throw new BadRequestException("Author not found.");
             }
 
-            Publisher? publisher = await _publisherService.GetOne(book.PublisherId); if (publisher == null)
+            Publisher? publisher = await _publisherService.GetOne(book.PublisherId); 
+            if (publisher == null)
             {
-                return BadRequest();
+                throw new BadRequestException("Publisher not found."); 
             }
 
             await _bookService.Add(book);  
@@ -60,17 +59,19 @@ namespace BookstoreApplication.Controllers
         {
             if (id != book.Id)
             {
-                return BadRequest();
+                throw new BadRequestException("Identifier value is invalid.");
             }
 
-            Author? author = await _authorService.GetOne(book.AuthorId); if (author == null)
+            Author? author = await _authorService.GetOne(book.AuthorId); 
+            if (author == null)
             {
-                return BadRequest();
+                throw new BadRequestException("Author not found.");
             }
 
-            Publisher? publisher = await _publisherService.GetOne(book.PublisherId); if (publisher == null)
+            Publisher? publisher = await _publisherService.GetOne(book.PublisherId); 
+            if (publisher == null)
             {
-                return BadRequest();
+                throw new BadRequestException("Publisher not found.");
             }
 
             await _bookService.Update(book);
@@ -83,7 +84,7 @@ namespace BookstoreApplication.Controllers
             bool deleted = await _bookService.Delete(id);
             if (!deleted)
             {
-                return NotFound();
+                throw new NotFoundException(id);
             }
             return NoContent();
         }

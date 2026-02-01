@@ -2,6 +2,7 @@
 using BookstoreApplication.DTOs;
 using BookstoreApplication.Models;
 using BookstoreApplication.Repositories;
+using BookstoreApplication.Exceptions;
 
 namespace BookstoreApplication.Services
 {
@@ -34,7 +35,7 @@ namespace BookstoreApplication.Services
 
             if (book == null)
             {
-                return null;
+                throw new NotFoundException(id);
             }
 
             return _mapper.Map<BookDetailsDTO>(book);

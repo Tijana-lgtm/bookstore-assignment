@@ -8,7 +8,7 @@ namespace BookstoreApplication.Services
         Task Add(Book book);
         Task<bool> Delete(int id);
         Task<List<BookDTO>> GetAll();
-        Task<BookDetailsDTO?> GetOne(int id);
+        Task<BookDetailsDTO> GetOne(int id);
         Task Update(Book book);
     }
 }
