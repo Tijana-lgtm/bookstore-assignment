@@ -1,4 +1,5 @@
 ﻿using BookstoreApplication.Models;
+using BookstoreApplication.Utils;
 
 namespace BookstoreApplication.Repositories
 {
@@ -9,5 +10,6 @@ namespace BookstoreApplication.Repositories
         Task<List<Author>> GetAllAsync();
         Task<Author?> GetByIdAsync(int id);
         Task<Author> UpdateAsync(Author author);
+        Task<PaginatedList<Author>> GetAllPaged(int page);
     }
 }

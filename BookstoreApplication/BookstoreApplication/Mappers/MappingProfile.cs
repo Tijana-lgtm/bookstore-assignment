@@ -20,6 +20,8 @@ namespace BookstoreApplication.Mappers
                 .ForMember(dest => dest.PublisherId, opt => opt.MapFrom(src => src.Publisher.Id))
                 .ForMember(dest => dest.PublisherName, opt => opt.MapFrom(src => src.Publisher.Name))
                 .ReverseMap();
+
+            CreateMap<Author, AuthorDTO>().ReverseMap();
         }
     }
 }

@@ -23,7 +23,19 @@ namespace BookstoreApplication.Controllers
             return Ok(await _authorService.GetAll());
         }
 
-        
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAuthorsPage([FromQuery] int page = 1)
+        {
+            if (page < 1)
+            {
+                return BadRequest("Page value is invalid.");
+            }
+
+            return Ok(await _authorService.GetAllPaged(page));
+        }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
         {
@@ -35,7 +47,7 @@ namespace BookstoreApplication.Controllers
             return Ok(author);
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> Post(Author author)
         {

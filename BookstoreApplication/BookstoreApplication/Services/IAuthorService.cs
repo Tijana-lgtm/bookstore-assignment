@@ -1,4 +1,6 @@
-﻿using BookstoreApplication.Models;
+﻿using BookstoreApplication.DTOs;
+using BookstoreApplication.Models;
+using BookstoreApplication.Utils;
 
 namespace BookstoreApplication.Services
 {
@@ -9,5 +11,6 @@ namespace BookstoreApplication.Services
         Task<List<Author>> GetAll();
         Task<Author?> GetOne(int id);
         Task Update(Author author);
+        Task<PaginatedList<AuthorDTO>> GetAllPaged(int page);
     }
 }
