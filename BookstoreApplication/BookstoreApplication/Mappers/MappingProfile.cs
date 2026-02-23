@@ -22,6 +22,9 @@ namespace BookstoreApplication.Mappers
                 .ReverseMap();
 
             CreateMap<Author, AuthorDTO>().ReverseMap();
+
+            CreateMap<RegistrationDTO, ApplicationUser>()
+    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username));
         }
     }
 }

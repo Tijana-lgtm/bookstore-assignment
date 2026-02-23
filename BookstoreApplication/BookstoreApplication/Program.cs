@@ -5,6 +5,7 @@ using BookstoreApplication.Models;
 using BookstoreApplication.Repositories;
 using BookstoreApplication.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 var logger = new LoggerConfiguration()
@@ -48,6 +49,23 @@ builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+});
+
+builder.Services.AddAuthentication();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -71,6 +89,9 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors("AllowAll");
+
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
