@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookstoreApplication.Models
 {
@@ -20,6 +21,11 @@ namespace BookstoreApplication.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<IdentityRole>().HasData(
+            new IdentityRole { Name = "Librarian", NormalizedName = "LIBRARIAN" },
+            new IdentityRole { Name = "Editor", NormalizedName = "EDITOR" }
+            
+            );
             modelBuilder.Entity<AuthorAward>(authorAwardEntity =>
             {
 

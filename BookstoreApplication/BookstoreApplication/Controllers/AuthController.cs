@@ -20,10 +20,16 @@ namespace BookstoreApplication.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegistrationDTO data)
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return BadRequest("Already logged in.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             await _authService.RegisterAsync(data);
             return NoContent();
         }
@@ -31,6 +37,11 @@ namespace BookstoreApplication.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO data)
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return BadRequest("Already logged in.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
