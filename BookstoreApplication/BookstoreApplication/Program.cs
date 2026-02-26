@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using BookstoreApplication.Utilis;
+using Microsoft.AspNetCore.Authentication;
 
 
 var logger = new LoggerConfiguration()
@@ -101,7 +102,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder.Services.AddAuthentication(options =>
-{ 
+{
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
@@ -109,19 +110,29 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateLifetime = true, 
+        ValidateLifetime = true,
 
-        ValidateIssuer = true,   
-        ValidIssuer = builder.Configuration["Jwt:Issuer"], 
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
 
-        ValidateAudience = true, 
-        ValidAudience = builder.Configuration["Jwt:Audience"], 
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
 
-        ValidateIssuerSigningKey = true, 
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])), 
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
 
-        RoleClaimType = ClaimTypes.Role 
+        RoleClaimType = ClaimTypes.Role
     };
+})
+.AddGoogle("Google", options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+
+    options.CallbackPath = "/api/Auth/signin-google";
 });
 
 builder.Services.AddCors(options =>

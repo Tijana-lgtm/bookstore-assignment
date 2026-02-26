@@ -94,5 +94,33 @@ namespace BookstoreApplication.Services
             return _mapper.Map<ProfileDTO>(user);
         }
 
+        public async Task<string> LoginWithGoogle(string email, string name, string surname)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    Name = name,
+                    Surname = surname
+                };
+
+                var result = await _userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, "Librarian"); 
+                }
+                else
+                {
+                    throw new BadRequestException("Google login failed: user creation error");
+                }
+            }
+
+            var token = await GenerateJwt(user);
+            return token;
+        }
     }
 }

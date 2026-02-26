@@ -11,7 +11,9 @@ namespace BookstoreApplication.Mappers
             CreateMap<Book, BookDTO>()
                 .ForMember(dest => dest.AuthorFullName, opt => opt.MapFrom(src => src.Author.FullName))
                 .ForMember(dest => dest.PublisherName, opt => opt.MapFrom(src => src.Publisher.Name))
+                .ForMember(dest => dest.PublishedDate, opt => opt.MapFrom(src => src.PublishedDate))
                 .ForMember(dest => dest.YearsSincePublished, opt => opt.MapFrom(src => DateTime.Now.Year - src.PublishedDate.Year))
+                .ForMember(dest => dest.PageCount, opt => opt.MapFrom(src => src.PageCount))
                 .ReverseMap();
 
             CreateMap<Book, BookDetailsDTO>()
