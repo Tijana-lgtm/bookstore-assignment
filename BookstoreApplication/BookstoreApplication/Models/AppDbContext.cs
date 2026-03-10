@@ -16,16 +16,18 @@ namespace BookstoreApplication.Models
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Award> Awards { get; set; }
         public DbSet<AuthorAward> AuthorAwards { get; set; }
+        public DbSet<Issue> Issues { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<IdentityRole>().HasData(
-            new IdentityRole { Name = "Librarian", NormalizedName = "LIBRARIAN" },
-            new IdentityRole { Name = "Editor", NormalizedName = "EDITOR" }
-            
-            );
+                new IdentityRole { Id = "1", Name = "Librarian", NormalizedName = "LIBRARIAN" },
+                new IdentityRole { Id = "2", Name = "Editor", NormalizedName = "EDITOR" }
+
+                        );
             modelBuilder.Entity<AuthorAward>(authorAwardEntity =>
             {
 

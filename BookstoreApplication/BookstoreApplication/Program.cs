@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using BookstoreApplication.Utilis;
 using Microsoft.AspNetCore.Authentication;
+using BookstoreApplication.Connections;
 
 
 var logger = new LoggerConfiguration()
@@ -87,6 +88,12 @@ builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IVolumeService, VolumeService>();
+builder.Services.AddScoped<IComicVineConnection, ComicVineConnection>();
+builder.Services.AddHttpClient<ComicVineConnection>();
+
+builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
